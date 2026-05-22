@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Online Pemrograman Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Mengimpor Lucide Icons untuk estetika UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar untuk navigasi soal */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 transition-shadow duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md shadow-indigo-200">
+                    <i data-lucide="code-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 tracking-tight">PEMROGRAMAN-WEB</h1>
+                    <p class="text-xs text-slate-500">Aplikasi Ujian Online Pemrograman Web</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="btnSoundToggle" onclick="toggleSound()" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors" title="Aktifkan/Matikan Suara">
+                    <i data-lucide="volume-2" id="soundIcon" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden sm:flex items-center space-x-2 text-sm text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+                    <span>Sistem Terpantau</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col justify-center">
+
+        <section id="panelRegistration" class="max-w-lg w-full mx-auto bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden transition-all duration-300 transform hover:scale-[1.01]">
+            <div class="bg-gradient-to-r from-indigo-600 to-violet-600 p-8 text-white text-center relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl"></div>
+                <h2 class="text-2xl font-extrabold tracking-tight">Registrasi Peserta</h2>
+                <p class="text-indigo-100 mt-2 text-sm">Lengkapi data identitas Anda sebelum memulai ujian.</p>
+            </div>
+            <form id="formIdentity" onsubmit="handleRegistration(event)" class="p-8 space-y-6">
+                <div>
+                    <label for="inputNama" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                        <i data-lucide="user" class="w-4 h-4 text-slate-400"></i> Nama Lengkap
+                    </label>
+                    <input type="text" id="inputNama" required minlength="3" placeholder="Contoh: Budi Santoso" 
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm font-medium">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="inputNIM" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                            <i data-lucide="credit-card" class="w-4 h-4 text-slate-400"></i> NIM / No. Induk
+                        </label>
+                        <input type="text" id="inputNIM" required pattern="^[0-9A-Za-z\-]+$" placeholder="Contoh: 220101004" 
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm font-medium">
+                    </div>
+                    <div>
+                        <label for="selectKelas" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                            <i data-lucide="graduation-cap" class="w-4 h-4 text-slate-400"></i> Kelas
+                        </label>
+                        <select id="selectKelas" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-all text-sm font-medium">
+                            <option value="">Pilih Kelas</option>
+                            <option value="IF-4A">Teknik Informatika (IF-4A)</option>
+                            <option value="IF-4B">Teknik Informatika (IF-4B)</option>
+                            <option value="SI-4A">Sistem Informasi (SI-4A)</option>
+                            <option value="SI-4B">Sistem Informasi (SI-4B)</option>
+                            <option value="MI-4">Manajemen Informatika</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-start gap-3">
+                    <i data-lucide="info" class="w-5 h-5 text-indigo-600 shrink-0 mt-0.5"></i>
+                    <div class="text-xs text-indigo-900 leading-relaxed">
+                        Pastikan data yang dimasukkan benar. Hasil nilai dan sertifikat kelulusan digital akan digenerasi otomatis berdasarkan identitas ini.
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-150 transition-all duration-300 flex items-center justify-center gap-2 text-sm">
+                    <span>Masuk ke Panduan Ujian</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </form>
+        </section>
+
+        <section id="panelInstructions" class="hidden max-w-2xl w-full mx-auto bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="book-open" class="w-6 h-6 text-indigo-600"></i> Petunjuk Pelaksanaan Ujian
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">Harap baca dengan seksama sebelum memulai ujian online.</p>
+            </div>
+            <div class="p-8 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                        <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Jumlah Soal</span>
+                        <span class="text-2xl font-extrabold text-slate-800 mt-1 block">50 Butir</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                        <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Waktu Ujian</span>
+                        <span class="text-2xl font-extrabold text-slate-800 mt-1 block">60 Menit</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                        <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Passing Grade</span>
+                        <span class="text-2xl font-extrabold text-emerald-600 mt-1 block">70 / 100</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Aturan & Ketentuan:</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                            <span>Soal terdiri dari 50 pilihan ganda acak mencakup materi HTML, CSS, JavaScript, PHP, dan MySQL.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                            <span>Sistem dilengkapi fitur <strong>Ragu-ragu</strong> untuk mempermudah peninjauan ulang jawaban.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                            <span>Sistem mengunci otomatis dan mengirim jawaban jika durasi waktu ujian habis.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                            <span>Dilarang membuka tab browser lain, berdiskusi, atau menyontek selama ujian berlangsung.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
+                    <button onclick="backToRegistration()" class="px-6 py-3.5 border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 text-sm font-semibold transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
+                    </button>
+                    <button onclick="startExam()" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-100 transition-all flex items-center justify-center gap-2 text-sm">
+                        <i data-lucide="play" class="w-4 h-4"></i> Mulai Ujian Sekarang
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="panelExam" class="hidden flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Area Kiri: Soal, Opsi Jawaban, Navigation Bottom -->
+            <div class="lg:col-span-8 flex flex-col space-y-6">
+                
+                <!-- Status Bar Soal Aktif -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-indigo-150 text-indigo-700 px-3 py-1 rounded-lg text-xs font-bold uppercase" id="badgeSoal">SOAL 1 DARI 50</span>
+                        <span class="text-xs text-slate-400 font-medium" id="statusTersimpan">Otomatis Tersimpan</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg text-xs font-semibold" id="indicatorRagu" style="display: none;">
+                        <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Status: Ragu-ragu
+                    </div>
+                </div>
+
+                <!-- Konten Inti Soal -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100 min-h-[300px] flex flex-col justify-between">
+                    <div>
+                        <!-- Pertanyaan -->
+                        <div class="text-base sm:text-lg font-bold text-slate-800 leading-relaxed mb-6" id="txtPertanyaan">
+                            Memuat pertanyaan...
+                        </div>
+
+                        <!-- Opsi-Opsi Pilihan Ganda -->
+                        <div class="space-y-3.5" id="containerOpsi">
+                            <!-- Opsi akan digenerasi dinamis menggunakan JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Soal -->
+                    <div class="pt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 mt-8">
+                        <div class="flex items-center gap-2.5">
+                            <button id="btnPrev" onclick="prevQuestion()" class="px-5 py-3 border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 font-semibold text-sm transition-all flex items-center gap-2">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i> Sebelumnya
+                            </button>
+                        </div>
+                        
+                        <button id="btnDoubt" onclick="toggleDoubt()" class="px-5 py-3 border border-amber-300 bg-amber-50 hover:bg-amber-100/70 text-amber-800 rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-4 h-4 text-amber-600"></i> Ragu-ragu
+                        </button>
+
+                        <div class="flex items-center gap-2.5">
+                            <button id="btnNext" onclick="nextQuestion()" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                                Berikutnya <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Area Kanan: Detail Siswa, Timer, Grid Nomor Soal -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- Widget Timer Sisa Waktu & Informasi Peserta -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-lg border border-slate-800 relative overflow-hidden">
+                    <div class="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 w-32 h-32 bg-indigo-500/10 rounded-full blur-xl"></div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-indigo-300 font-bold uppercase tracking-wider">SISA WAKTU</span>
+                        <div class="flex items-center gap-1.5 text-rose-400 font-bold bg-rose-500/10 px-2.5 py-1 rounded-md text-xs animate-pulse" id="warningTimer" style="display: none;">
+                            <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Segera Kumpulkan!
+                        </div>
+                    </div>
+                    
+                    <!-- Timer Digit Besar -->
+                    <div class="flex items-baseline gap-1 text-3xl font-extrabold tracking-tight font-mono mb-4" id="txtTimer">
+                        00:00:00
+                    </div>
+
+                    <!-- Progress Bar Timer -->
+                    <div class="w-full bg-slate-700 rounded-full h-1.5 mb-6 overflow-hidden">
+                        <div id="barTimer" class="bg-indigo-500 h-full w-full transition-all duration-1000"></div>
+                    </div>
+
+                    <!-- Detail Singkat Siswa -->
+                    <div class="pt-4 border-t border-slate-700 space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Nama:</span>
+                            <span class="font-semibold text-slate-100 truncate max-w-[200px]" id="widgetNama">John Doe</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">NIM:</span>
+                            <span class="font-semibold text-slate-100" id="widgetNIM">20210099</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Kelas:</span>
+                            <span class="font-semibold text-slate-100" id="widgetKelas">IF-4A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Nomor Navigasi Soal -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4 flex items-center gap-2">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-indigo-500"></i> Peta Navigasi Soal
+                    </h3>
+                    
+                    <!-- Keterangan Status Warna -->
+                    <div class="grid grid-cols-3 gap-2 text-[10px] text-slate-500 font-medium mb-4 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-slate-100 border border-slate-300 rounded"></span> Belum
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-indigo-600 rounded"></span> Selesai
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-amber-400 rounded"></span> Ragu-ragu
+                        </div>
+                    </div>
+
+                    <!-- Kotak Tombol Grid -->
+                    <div class="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-5 gap-2 max-h-[220px] overflow-y-auto custom-scrollbar p-1" id="containerGridNo">
+                        <!-- Kotak Soal diisi pakai Javascript -->
+                    </div>
+
+                    <!-- Tombol Selesaikan Sesi Ujian -->
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <button onclick="confirmSubmit()" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 px-4 rounded-xl font-bold text-sm shadow-md shadow-rose-100 transition-all duration-200 flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i> Akhiri & Kirim Ujian
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="panelResult" class="hidden max-w-4xl w-full mx-auto space-y-8">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+                <!-- Banner Status Kelulusan -->
+                <div class="p-8 text-center relative overflow-hidden" id="bannerHasil">
+                    <div class="absolute -right-20 -top-20 w-52 h-52 bg-white/10 rounded-full blur-3xl"></div>
+                    <div class="absolute -left-20 -bottom-20 w-52 h-52 bg-white/10 rounded-full blur-3xl"></div>
+                    <div class="inline-flex p-4 rounded-full bg-white/20 mb-4" id="iconStatusCircle">
+                        <i data-lucide="award" class="w-12 h-12 text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white" id="txtKelulusan">Selamat, Anda LULUS!</h2>
+                    <p class="text-white/80 mt-1.5 text-sm" id="txtSubKelulusan">Nilai Anda melampaui standar kelulusan minimal (Passing Grade 70).</p>
+                </div>
+
+                <div class="p-8 grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Dashboard Statistik Nilai Kiri -->
+                    <div class="md:col-span-5 flex flex-col items-center justify-center p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                        <span class="text-xs font-bold text-slate-400 tracking-wider uppercase mb-1">SKOR AKHIR</span>
+                        <div class="text-6xl font-extrabold text-slate-800 my-2 font-mono" id="txtSkor">90</div>
+                        <div class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold" id="badgeGrade">GRADE: A</div>
+                        
+                        <!-- Rincian Kecil Jawaban -->
+                        <div class="w-full grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-slate-200">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase">Benar</span>
+                                <span class="text-sm font-bold text-emerald-600" id="statBenar">45</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase">Salah</span>
+                                <span class="text-sm font-bold text-rose-600" id="statSalah">5</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase">Kosong</span>
+                                <span class="text-sm font-bold text-slate-500" id="statKosong">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informasi Rincian Mahasiswa Kanan -->
+                    <div class="md:col-span-7 flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Identitas Peserta & Sesi:</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div class="space-y-1">
+                                    <span class="text-slate-400 text-xs block">Nama Peserta:</span>
+                                    <span class="font-bold text-slate-700" id="resNama">Muhammad Al-Fatih</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <span class="text-slate-400 text-xs block">NIM:</span>
+                                    <span class="font-bold text-slate-700 font-mono" id="resNIM">2201010045</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <span class="text-slate-400 text-xs block">Kelas:</span>
+                                    <span class="font-bold text-slate-700" id="resKelas">IF-4A</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <span class="text-slate-400 text-xs block">Waktu Selesai:</span>
+                                    <span class="font-bold text-slate-700" id="resSelesai">14:20:12 WIB</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Aksi Akhir -->
+                        <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-slate-100">
+                            <button onclick="downloadScoreSheet()" class="flex-grow bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-all shadow-md shadow-indigo-100 flex items-center justify-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> Unduh Hasil Ujian
+                            </button>
+                            <button onclick="toggleReviewSection()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 px-5 rounded-xl text-sm transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i> Review Jawaban
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian Review Jawaban & Pembahasan (Dinamis Di-toggle) -->
+            <div id="sectionReview" class="hidden space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="list-checks" class="w-5.5 h-5.5 text-indigo-600"></i> Review Jawaban & Pembahasan Soal
+                    </h3>
+                    <button onclick="toggleReviewSection()" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 bg-white">
+                        Tutup Review
+                    </button>
+                </div>
+                
+                <div class="space-y-4" id="containerReviewList">
+                    <!-- Konten dinamis review soal akan digenerate dari JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="customModal" class="hidden fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 scale-95 transform transition-transform duration-300" id="modalBox">
+            <div class="flex items-start gap-4" id="modalHeader">
+                <div class="p-3 rounded-xl shrink-0" id="modalIconContainer">
+                    <i data-lucide="info" class="w-6 h-6" id="modalIcon"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900" id="modalTitle">Konfirmasi</h3>
+                    <p class="text-sm text-slate-500 mt-1" id="modalMessage">Apakah Anda yakin dengan pilihan ini?</p>
+                </div>
+            </div>
+            <div class="mt-6 flex items-center justify-end gap-3" id="modalActions">
+                <button id="btnModalCancel" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 font-semibold rounded-lg text-sm transition-all">Batal</button>
+                <button id="btnModalConfirm" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition-all">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Copyright -->
+    <footer class="bg-white border-t border-slate-100 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+            &copy; 2026 WebProgExam App. Dikembangkan secara adaptif untuk pembelajaran Pemrograman Web yang profesional.
+        </div>
+    </footer>
+
+    <script>
+        // Array Bank Soal - Berjumlah tepat 50 soal bertema Pemrograman Web
+        const listSoal = [
+            {
+                id: 1,
+                question: "Tag HTML mana yang digunakan untuk mendefinisikan heading atau judul utama dengan ukuran paling besar?",
+                options: ["&lt;h6&gt;", "&lt;header&gt;", "&lt;h1&gt;", "&lt;head&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;h1&gt; digunakan untuk merepresentasikan heading utama tingkat pertama (paling tinggi) pada suatu dokumen HTML."
+            },
+            {
+                id: 2,
+                question: "Kepanjangan yang benar dari istilah stylesheet CSS adalah...",
+                options: ["Creative Style Sheets", "Cascading Style Sheets", "Computer Style Sheets", "Control Style Sheets"],
+                correct: 1,
+                explanation: "CSS adalah singkatan dari Cascading Style Sheets yang digunakan untuk mengatur visualisasi dokumen HTML."
+            },
+            {
+                id: 3,
+                question: "Atribut HTML mana yang digunakan untuk membuka tautan link di tab browser baru secara otomatis?",
+                options: ["target='_new'", "target='_blank'", "rel='newtab'", "href='new'"],
+                correct: 1,
+                explanation: "Atribut target='_blank' memerintahkan browser untuk membuka URL tujuan di tab atau jendela baru."
+            },
+            {
+                id: 4,
+                question: "Di dalam CSS, properti apa yang wajib disesuaikan jika ingin mengganti warna latar belakang dari sebuah elemen?",
+                options: ["color", "bg-color", "background-color", "backdrop"],
+                correct: 2,
+                explanation: "Properti background-color di dalam CSS digunakan secara eksklusif untuk mendefinisikan warna latar suatu elemen."
+            },
+            {
+                id: 5,
+                question: "Sintaksis JavaScript manakah yang benar untuk menuliskan pesan ke dalam Developer Tools Console browser?",
+                options: ["console.log('Halo')", "print('Halo')", "document.write('Halo')", "response.write('Halo')"],
+                correct: 0,
+                explanation: "Fungsi console.log() digunakan di dalam JavaScript untuk melacak log atau mengeluarkan pesan debug di konsol browser."
+            },
+            {
+                id: 6,
+                question: "Manakah cara pembuatan variabel di JavaScript modern yang memiliki ruang lingkup lokal / blok (block-scope) dan nilainya tidak dapat diubah kembali?",
+                options: ["var", "let", "const", "def"],
+                correct: 2,
+                explanation: "Keyword 'const' digunakan untuk deklarasi variabel block-scope yang nilainya konstan / tidak bisa di-reassign setelah ditetapkan."
+            },
+            {
+                id: 7,
+                question: "Tag semantic HTML5 manakah yang paling direkomendasikan untuk menampung elemen-elemen kaki halaman seperti informasi copyright?",
+                options: ["&lt;bottom&gt;", "&lt;section&gt;", "&lt;foot&gt;", "&lt;footer&gt;"],
+                correct: 3,
+                explanation: "Tag &lt;footer&gt; merupakan elemen semantik HTML5 yang didesain khusus untuk membungkus konten penutup/footer dari dokumen atau section."
+            },
+            {
+                id: 8,
+                question: "Bagaimanakah sintaksis properti CSS yang tepat untuk memosisikan teks berada di tengah-tengah kontainernya secara horizontal?",
+                options: ["align: center", "text-align: center", "valign: center", "content-align: center"],
+                correct: 1,
+                explanation: "Properti text-align: center digunakan untuk mengatur perataan baris teks secara horizontal agar rata tengah."
+            },
+            {
+                id: 9,
+                question: "Fungsi DOM selector JavaScript manakah yang paling tepat digunakan untuk mengambil elemen HTML tunggal berdasarkan ID-nya yang unik?",
+                options: ["document.getElementById()", "document.querySelectorClass()", "document.getElementsTagName()", "document.fetchId()"],
+                correct: 0,
+                explanation: "Fungsi document.getElementById() digunakan untuk mengambil referensi elemen unik dari DOM berdasarkan atribut ID-nya."
+            },
+            {
+                id: 10,
+                question: "Kepanjangan dari istilah DOM dalam pemrosesan JavaScript di browser adalah...",
+                options: ["Data Object Model", "Document Orientated Module", "Document Object Model", "Database Operating Model"],
+                correct: 2,
+                explanation: "DOM merupakan singkatan dari Document Object Model, sebuah antarmuka pemrograman untuk dokumen HTML dan XML."
+            },
+            {
+                id: 11,
+                question: "Tag HTML manakah yang paling tepat untuk menyisipkan baris baru (line break) tanpa membuat paragraf baru?",
+                options: ["&lt;break&gt;", "&lt;lb&gt;", "&lt;br&gt;", "&lt;newline&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;br&gt; digunakan untuk menyisipkan jeda baris tunggal dalam teks dokumen HTML."
+            },
+            {
+                id: 12,
+                question: "Deklarasi jenis dokumen (doctype) yang benar pada bagian paling atas kode HTML5 adalah...",
+                options: ["&lt;!DOCTYPE html&gt;", "&lt;html doctype='html5'&gt;", "&lt;?xml version='1.0'?&gt;", "&lt;!DOCTYPE html5&gt;"],
+                correct: 0,
+                explanation: "&lt;!DOCTYPE html&gt; adalah deklarasi doctype standar dan wajib bagi seluruh dokumen HTML5 agar browser merender dengan mode standar."
+            },
+            {
+                id: 13,
+                question: "Bagaimanakah penulisan penanda komentar multi-baris yang valid di dalam aturan penulisan file CSS?",
+                options: ["// komentar", "/* komentar */", "# komentar", "&lt;!-- komentar --&gt;"],
+                correct: 1,
+                explanation: "Komentar dalam CSS diawali dengan /* dan diakhiri dengan */. Gaya // tidak didukung secara native sebagai standar CSS."
+            },
+            {
+                id: 14,
+                question: "Metode pengiriman data form (HTTP Method) yang disarankan untuk data sensitif seperti password agar tidak terlihat pada alamat URL adalah...",
+                options: ["GET", "POST", "PUSH", "PATCH"],
+                correct: 1,
+                explanation: "Metode POST mengirimkan data dalam body dari HTTP request sehingga data tidak ditampilkan di URL bar browser."
+            },
+            {
+                id: 15,
+                question: "Elemen masukan formulir (form input) di bawah ini yang tepat digunakan jika pengguna hanya boleh memilih satu opsi dari beberapa pilihan adalah...",
+                options: ["checkbox", "radio", "text", "textarea"],
+                correct: 1,
+                explanation: "Input jenis 'radio' (radio button) didesain agar pengguna hanya dapat memilih satu opsi saja dari kelompok nama opsi yang sama."
+            },
+            {
+                id: 16,
+                question: "Properti CSS manakah yang digunakan untuk mengatur ketebalan garis batas terluar suatu elemen HTML?",
+                options: ["border-width", "border-style", "border-color", "outline-width"],
+                correct: 0,
+                explanation: "Properti border-width digunakan secara khusus untuk menentukan ketebalan dari garis tepi (border) elemen."
+            },
+            {
+                id: 17,
+                question: "Perintah Git yang digunakan untuk mengirimkan seluruh rekaman commit lokal kita menuju repository server online seperti GitHub adalah...",
+                options: ["git pull", "git push", "git commit", "git clone"],
+                correct: 1,
+                explanation: "Perintah 'git push' berfungsi mengunggah konten/commit dari repositori lokal Anda ke repositori jarak jauh (remote repository)."
+            },
+            {
+                id: 18,
+                question: "Fungsi bawaan JavaScript JSON.stringify() digunakan untuk tujuan apa?",
+                options: ["Mengubah teks JSON menjadi object JavaScript", "Mengubah object JavaScript menjadi format string JSON", "Menguji keaslian struktur data JSON", "Mengenkripsi data string"],
+                correct: 1,
+                explanation: "JSON.stringify() mengonversi objek atau nilai JavaScript menjadi string notasi objek JSON."
+            },
+            {
+                id: 19,
+                question: "Kepanjangan dari istilah API dalam pengembangan sistem berbasis web modern adalah...",
+                options: ["Application Programming Interface", "Adaptive Program Integration", "Active Protocol Instruction", "Access Private Information"],
+                correct: 0,
+                explanation: "API singkatan dari Application Programming Interface, sekumpulan definisi dan protokol untuk membangun dan mengintegrasikan perangkat lunak."
+            },
+            {
+                id: 20,
+                question: "Tag HTML mana yang digunakan untuk memuat aset berkas gambar ke dalam halaman web?",
+                options: ["&lt;image&gt;", "&lt;picture&gt;", "&lt;img&gt;", "&lt;src&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;img&gt; digunakan untuk menyematkan gambar di halaman web dengan atribut 'src' sebagai sumber lokasinya."
+            },
+            {
+                id: 21,
+                question: "Operator perbandingan JavaScript manakah yang membandingkan nilai sekaligus tipe data secara ketat (strict equality)?",
+                options: ["==", "=", "===", "!=="],
+                correct: 2,
+                explanation: "Operator === (strict equality) memeriksa apakah kedua operand memiliki nilai yang sama dan juga tipe data yang sama."
+            },
+            {
+                id: 22,
+                question: "Elemen HTML manakah yang digunakan untuk membungkus atau merujuk berkas kode JavaScript internal maupun eksternal?",
+                options: ["&lt;js&gt;", "&lt;javascript&gt;", "&lt;script&gt;", "&lt;code&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;script&gt; digunakan untuk menyematkan atau merujuk skrip sisi klien seperti JavaScript."
+            },
+            {
+                id: 23,
+                question: "Mesin basis data relasional (RDBMS) open source yang paling umum dan terintegrasi secara bawaan dengan bahasa pemrograman PHP adalah...",
+                options: ["MongoDB", "MySQL", "SQLite", "PostgreSQL"],
+                correct: 1,
+                explanation: "MySQL adalah RDBMS open-source yang sangat populer digunakan berpasangan dengan PHP untuk aplikasi web dinamis."
+            },
+            {
+                id: 24,
+                question: "Atribut pendukung pada tag &lt;img&gt; yang bertugas menyediakan deskripsi teks cadangan saat gambar gagal dimuat adalah...",
+                options: ["title", "alt", "desc", "fallback"],
+                correct: 1,
+                explanation: "Atribut 'alt' (alternative text) menyediakan keterangan teks pengganti apabila gambar tidak berhasil ditampilkan di browser."
+            },
+            {
+                id: 25,
+                question: "Di JavaScript, fungsi preventDefault() dalam manipulasi objek Event berguna untuk...",
+                options: ["Menghentikan propagasi event", "Membatalkan aksi default bawaan dari elemen bersangkutan", "Menghapus event listener", "Membuat error kustom"],
+                correct: 1,
+                explanation: "event.preventDefault() memberi tahu browser untuk tidak menjalankan tindakan bawaan dari event tersebut (misalnya, mencegah submit form me-refresh halaman)."
+            },
+            {
+                id: 26,
+                question: "Simbol CSS Selector manakah yang tepat untuk menargetkan elemen HTML yang memiliki nama kelas tertentu?",
+                options: ["Simbol tag (#)", "Simbol titik (.)", "Simbol bintang (*)", "Simbol persen (%)"],
+                correct: 1,
+                explanation: "Dalam selector CSS, simbol titik (.) digunakan khusus untuk menarget elemen berdasarkan atribut class-nya."
+            },
+            {
+                id: 27,
+                question: "Properti CSS manakah yang digunakan untuk mengatur ruang kosong di dalam batas (border) suatu elemen HTML?",
+                options: ["margin", "padding", "spacing", "gap"],
+                correct: 1,
+                explanation: "Padding adalah properti CSS yang digunakan untuk menghasilkan ruang di sekitar konten elemen, di dalam batas terluar (border) yang ditentukan."
+            },
+            {
+                id: 28,
+                question: "Properti CSS manakah yang digunakan untuk menciptakan jarak kosong di luar border elemen lain?",
+                options: ["padding", "margin", "spacing", "outline"],
+                correct: 1,
+                explanation: "Margin adalah properti CSS yang digunakan untuk menciptakan ruang kosong di sekeliling elemen, di luar batas terluarnya (border)."
+            },
+            {
+                id: 29,
+                question: "Tag HTML yang bertugas menetapkan tulisan judul yang muncul pada tab browser internet Anda adalah...",
+                options: ["&lt;head&gt;", "&lt;meta&gt;", "&lt;title&gt;", "&lt;caption&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;title&gt; menetapkan judul dokumen yang ditampilkan di bilah judul browser atau di tab halaman."
+            },
+            {
+                id: 30,
+                question: "Nama event handler JavaScript yang terpicu secara otomatis begitu seluruh komponen halaman web selesai dimuat penuh adalah...",
+                options: ["onclick", "onready", "onload", "onfinished"],
+                correct: 2,
+                explanation: "Event onload terpicu ketika suatu objek (seperti halaman web penuh atau gambar) telah selesai dimuat seluruhnya."
+            },
+            {
+                id: 31,
+                question: "Manakah di bawah ini yang merupakan framework JavaScript populer untuk membangun Single Page Application (SPA) yang dikembangkan oleh Google?",
+                options: ["React", "Vue", "Angular", "Laravel"],
+                correct: 2,
+                explanation: "Angular adalah platform dan framework aplikasi web berbasis TypeScript yang dikembangkan dan didukung oleh Google."
+            },
+            {
+                id: 32,
+                question: "Framework / pustaka JavaScript berbasis komponen untuk membangun antarmuka pengguna yang dirancang pertama kali oleh Facebook (Meta) adalah...",
+                options: ["Angular", "React", "Svelte", "Ember"],
+                correct: 1,
+                explanation: "React adalah pustaka JavaScript open-source yang dibuat oleh Meta (Facebook) untuk mendesain komponen UI interaktif."
+            },
+            {
+                id: 33,
+                question: "Fungsi bawaan dalam bahasa PHP yang wajib dieksekusi di awal baris kode sebelum kita bisa menyimpan data ke dalam Session adalah...",
+                options: ["session_init()", "session_start()", "session_open()", "session_register()"],
+                correct: 1,
+                explanation: "Fungsi session_start() digunakan untuk memulai sesi baru atau melanjutkan sesi yang sudah ada di dalam server PHP."
+            },
+            {
+                id: 34,
+                question: "Karakter/simbol khusus apakah yang wajib diletakkan di awal nama variabel di dalam sintaks bahasa pemrograman PHP?",
+                options: ["Simbol @", "Simbol #", "Simbol $", "Simbol &"],
+                correct: 2,
+                explanation: "Di PHP, sebuah nama variabel wajib diawali dengan simbol tanda dolar ($), diikuti oleh karakter huruf atau underscore."
+            },
+            {
+                id: 35,
+                question: "Tag HTML manakah yang digunakan untuk mendefinisikan baris (row) baru dalam suatu susunan tabel?",
+                options: ["&lt;table&gt;", "&lt;td&gt;", "&lt;tr&gt;", "&lt;th&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;tr&gt; (Table Row) mendefinisikan satu baris sel dalam sebuah tabel HTML."
+            },
+            {
+                id: 36,
+                question: "Tag HTML manakah yang digunakan untuk menampung sel data biasa di dalam kolom tabel HTML?",
+                options: ["&lt;tr&gt;", "&lt;th&gt;", "&lt;td&gt;", "&lt;cell&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;td&gt; (Table Data) digunakan untuk menampung data/sel biasa di dalam tabel HTML."
+            },
+            {
+                id: 37,
+                question: "Ukuran satuan CSS relatif manakah yang dihitung berdasarkan ukuran font default elemen akar (root element / html)?",
+                options: ["em", "rem", "px", "%"],
+                correct: 1,
+                explanation: "Satuan 'rem' (Root EM) adalah satuan relatif yang nilainya mengacu pada ukuran font default elemen akar (&lt;html&gt;) halaman."
+            },
+            {
+                id: 38,
+                question: "Nilai deklarasi properti display di CSS yang digunakan untuk merancang tata letak dua dimensi yang berbasis grid kolom dan baris adalah...",
+                options: ["display: flex", "display: block", "display: grid", "display: table"],
+                correct: 2,
+                explanation: "display: grid mengaktifkan sistem tata letak kisi (grid layout) dua dimensi yang sangat fleksibel mengatur kolom dan baris."
+            },
+            {
+                id: 39,
+                question: "Kode status respons HTTP (HTTP Status Code) bernomor 404 memiliki arti status...",
+                options: ["OK / Sukses", "Forbidden / Terlarang", "Not Found / Tidak Ditemukan", "Internal Server Error"],
+                correct: 2,
+                explanation: "Kode status HTTP 404 Not Found menunjukkan bahwa server tidak dapat menemukan sumber daya/URL yang diminta oleh pengguna."
+            },
+            {
+                id: 40,
+                question: "Kode status respons HTTP (HTTP Status Code) bernomor 200 memiliki makna...",
+                options: ["Created", "OK / Sukses", "Accepted", "No Content"],
+                correct: 1,
+                explanation: "Kode status 200 OK menandakan bahwa permintaan klien ke server berhasil diproses dengan sukses."
+            },
+            {
+                id: 41,
+                question: "Kode status respons HTTP (HTTP Status Code) bernomor 500 melambangkan kendala...",
+                options: ["Bad Request", "Unauthorized", "Gateway Timeout", "Internal Server Error"],
+                correct: 3,
+                explanation: "Kode status 500 Internal Server Error menunjukkan adanya masalah internal yang dialami oleh server aplikasi."
+            },
+            {
+                id: 42,
+                question: "Metode manipulasi array di JavaScript yang digunakan khusus untuk menyisipkan satu atau beberapa data baru di bagian paling ujung/akhir array adalah...",
+                options: ["pop()", "push()", "shift()", "unshift()"],
+                correct: 1,
+                explanation: "Fungsi push() digunakan untuk menambahkan satu atau lebih elemen baru ke akhir array dan mengembalikan panjang array yang baru."
+            },
+            {
+                id: 43,
+                question: "Pustaka (library) JavaScript legendaris yang sangat mempermudah manipulasi DOM, penanganan event, dan Ajax dengan slogan 'Write Less, Do More' adalah...",
+                options: ["jQuery", "Bootstrap", "React", "Lodash"],
+                correct: 0,
+                explanation: "jQuery merupakan library JavaScript legendaris yang dirancang untuk menyederhanakan manipulasi DOM dan penanganan event cross-browser."
+            },
+            {
+                id: 44,
+                question: "Sistem Model Kotak (CSS Box Model) dari dalam ke luar secara berurutan tersusun atas elemen-elemen...",
+                options: ["Content - Padding - Border - Margin", "Content - Border - Padding - Margin", "Margin - Border - Padding - Content", "Content - Margin - Padding - Border"],
+                correct: 0,
+                explanation: "Model kotak CSS secara berurutan terdiri dari area konten utama (Content), jarak dalam (Padding), batas tepi (Border), dan jarak luar (Margin)."
+            },
+            {
+                id: 45,
+                question: "Format berkas pertukaran data yang ringan, mudah dibaca manusia, dan mudah dipetakan dalam JavaScript sebagai alternatif utama XML adalah...",
+                options: ["HTML", "JSON", "SQL", "CSV"],
+                correct: 1,
+                explanation: "JSON (JavaScript Object Notation) adalah format pertukaran data yang sangat ringan, terstruktur, mudah diurai dan dibuat oleh komputer maupun manusia."
+            },
+            {
+                id: 46,
+                question: "Dalam penataan CSS Flexbox, properti manakah yang digunakan untuk mengubah orientasi penataan item anak apakah menyamping atau menurun?",
+                options: ["flex-wrap", "justify-content", "flex-direction", "align-items"],
+                correct: 2,
+                explanation: "Properti flex-direction digunakan untuk menentukan arah orientasi item anak di dalam kontainer flex (baris horizontal atau kolom vertikal)."
+            },
+            {
+                id: 47,
+                question: "Atribut wajib pada tag &lt;form&gt; HTML yang bertugas menentukan alamat URL tujuan ke mana data isian form tersebut akan dikirim adalah...",
+                options: ["method", "action", "target", "href"],
+                correct: 1,
+                explanation: "Atribut 'action' berisi lokasi URL file server yang bertugas memproses data yang dikirimkan dari form."
+            },
+            {
+                id: 48,
+                question: "Fungsi pemanggilan penyeleksi DOM document.querySelectorAll() mengembalikan nilai berupa tipe data kumpulan objek berupa...",
+                options: ["Array biasa", "HTMLCollection", "NodeList", "Single Object Element"],
+                correct: 2,
+                explanation: "Fungsi document.querySelectorAll() mencocokkan selektor CSS dan mengembalikan elemen yang cocok dalam bentuk daftar node statis (NodeList)."
+            },
+            {
+                id: 49,
+                question: "Konstruksi atau fungsi perintah paling standar di dalam bahasa PHP yang digunakan untuk memproses dan mencetak data teks menuju layar browser adalah...",
+                options: ["print_r()", "echo", "console.log()", "print_text()"],
+                correct: 1,
+                explanation: "Pernyataan 'echo' di PHP adalah instruksi bawaan yang paling umum dipakai untuk menampilkan output berupa teks ke halaman web."
+            },
+            {
+                id: 50,
+                question: "Tag bawaan HTML5 manakah yang digunakan secara native untuk menyematkan fail lagu atau rekaman suara tanpa memerlukan plugin flash eksternal?",
+                options: ["&lt;sound&gt;", "&lt;music&gt;", "&lt;audio&gt;", "&lt;embed&gt;"],
+                correct: 2,
+                explanation: "Tag &lt;audio&gt; dispesifikasikan di dalam standar HTML5 untuk menambahkan, memutar, dan mengendalikan pemutaran audio secara native di halaman web."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; // Menyimpan jawaban terpilih { indexSoal: indeksOpsi }
+        let doubtStatus = {}; // Menyimpan status ragu-ragu { indexSoal: true/false }
+        let timerInterval = null;
+        let totalTimeSeconds = 60 * 60; // 60 menit durasi ujian
+        let remainingTime = totalTimeSeconds;
+        let soundEnabled = true;
+
+        // Inisialisasi Audio Context untuk efek suara sintetis mandiri
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        // Setup awal saat jendela browser selesai dimuat penuh
+        window.onload = function() {
+            lucide.createIcons();
+            // Mengecek apakah terdapat sesi aktif sebelumnya di local storage
+            checkExistingSession();
+        };
+
+        // Memutar efek suara UI menggunakan synthesizer bawaan Web Audio API
+        function playBeep(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.1);
+                } else if (type === 'success') {
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'warning') {
+                    osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                }
+            } catch (e) {
+                console.log("Audio not supported or blocked by browser policy yet.");
+            }
+        }
+
+        // Toggle suara on/off
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById("soundIcon");
+            if (soundEnabled) {
+                icon.setAttribute("data-lucide", "volume-2");
+                icon.classList.remove("text-rose-500");
+                icon.classList.add("text-slate-400");
+            } else {
+                icon.setAttribute("data-lucide", "volume-x");
+                icon.classList.add("text-rose-500");
+            }
+            lucide.createIcons();
+            playBeep('click');
+        }
+
+        function checkExistingSession() {
+            const savedSession = localStorage.getItem("webprog_exam_session");
+            if (savedSession) {
+                const session = JSON.parse(savedSession);
+                // Validasi sisa waktu sesi
+                const elapsed = Math.floor((Date.now() - session.startTime) / 1000);
+                if (elapsed < session.totalDuration) {
+                    // Sesi valid, pulihkan data pengerjaan ujian
+                    userAnswers = session.answers || {};
+                    doubtStatus = session.doubt || {};
+                    remainingTime = session.totalDuration - elapsed;
+                    
+                    // Masukkan detail siswa ke form dan widget langsung
+                    document.getElementById("inputNama").value = session.student.nama;
+                    document.getElementById("inputNIM").value = session.student.nim;
+                    document.getElementById("selectKelas").value = session.student.kelas;
+                    
+                    document.getElementById("widgetNama").textContent = session.student.nama;
+                    document.getElementById("widgetNIM").textContent = session.student.nim;
+                    document.getElementById("widgetKelas").textContent = session.student.kelas;
+
+                    // Lewati panduan, langsung masuk ke workspace ujian
+                    document.getElementById("panelRegistration").classList.add("hidden");
+                    document.getElementById("panelExam").classList.remove("hidden");
+                    
+                    startTimer();
+                    renderQuestion();
+                    renderGridNavigation();
+                    return;
+                } else {
+                    // Sesi kadaluarsa
+                    localStorage.removeItem("webprog_exam_session");
+                }
+            }
+        }
+
+        // Menyimpan status progres terkini ke lokal storage
+        function saveProgressToLocalStorage() {
+            const student = {
+                nama: document.getElementById("inputNama").value.trim(),
+                nim: document.getElementById("inputNIM").value.trim(),
+                kelas: document.getElementById("selectKelas").value
+            };
+            const sessionData = {
+                student: student,
+                answers: userAnswers,
+                doubt: doubtStatus,
+                startTime: Date.now() - ((totalTimeSeconds - remainingTime) * 1000),
+                totalDuration: totalTimeSeconds
+            };
+            localStorage.setItem("webprog_exam_session", JSON.stringify(sessionData));
+        }
+
+        // Membersihkan sesi lokal storage saat ujian selesai dikumpulkan resmi
+        function clearLocalStorageSession() {
+            localStorage.removeItem("webprog_exam_session");
+        }
+
+        function handleRegistration(event) {
+            event.preventDefault();
+            playBeep('click');
+
+            const nama = document.getElementById("inputNama").value.trim();
+            const nim = document.getElementById("inputNIM").value.trim();
+            const kelas = document.getElementById("selectKelas").value;
+
+            if (nama.length < 3 || !nim || !kelas) {
+                showCustomModal("Input Tidak Valid", "Mohon isi nama lengkap minimal 3 karakter, NIM, beserta kelas Anda.", "warning", false);
+                return;
+            }
+
+            // Sync ke Widget dan tampilan hasil
+            document.getElementById("widgetNama").textContent = nama;
+            document.getElementById("widgetNIM").textContent = nim;
+            document.getElementById("widgetKelas").textContent = kelas;
+
+            // Navigasi ke Panel Petunjuk
+            document.getElementById("panelRegistration").classList.add("hidden");
+            document.getElementById("panelInstructions").classList.remove("hidden");
+        }
+
+        function backToRegistration() {
+            playBeep('click');
+            document.getElementById("panelInstructions").classList.add("hidden");
+            document.getElementById("panelRegistration").classList.remove("hidden");
+        }
+
+        function startExam() {
+            playBeep('success');
+            document.getElementById("panelInstructions").classList.add("hidden");
+            document.getElementById("panelExam").classList.remove("hidden");
+
+            remainingTime = totalTimeSeconds;
+            startTimer();
+            renderQuestion();
+            renderGridNavigation();
+            saveProgressToLocalStorage();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            const timerText = document.getElementById("txtTimer");
+            const timerBar = document.getElementById("barTimer");
+            const warningAlert = document.getElementById("warningTimer");
+
+            timerInterval = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmitExam();
+                    return;
+                }
+                remainingTime--;
+
+                // Format Jam, Menit, Detik
+                const hours = Math.floor(remainingTime / 3600);
+                const minutes = Math.floor((remainingTime % 3600) / 60);
+                const seconds = remainingTime % 60;
+
+                const pad = (num) => String(num).padStart(2, '0');
+                timerText.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+                // Update lebar Progress bar
+                const percent = (remainingTime / totalTimeSeconds) * 100;
+                timerBar.style.width = `${percent}%`;
+
+                // Warning jika sisa waktu di bawah 5 menit (300 detik)
+                if (remainingTime < 300) {
+                    timerBar.classList.remove("bg-indigo-500");
+                    timerBar.classList.add("bg-rose-500");
+                    warningAlert.style.display = "flex";
+                }
+
+                // Berbunyi peringatan setiap menit di bawah 5 menit
+                if (remainingTime < 300 && remainingTime % 60 === 0) {
+                    playBeep('warning');
+                }
+
+                // Simpan berkala tiap detik
+                if (remainingTime % 5 === 0) {
+                    saveProgressToLocalStorage();
+                }
+            }, 1000);
+        }
+
+        function renderQuestion() {
+            const currentSoal = listSoal[currentQuestionIndex];
+            
+            // Atur teks nomor soal
+            document.getElementById("badgeSoal").textContent = `SOAL ${currentQuestionIndex + 1} DARI ${listSoal.length}`;
+            document.getElementById("txtPertanyaan").innerHTML = `${currentSoal.question}`;
+
+            // Handle status ragu-ragu
+            const indicatorRagu = document.getElementById("indicatorRagu");
+            const isDoubt = doubtStatus[currentQuestionIndex] === true;
+            if (isDoubt) {
+                indicatorRagu.style.display = "flex";
+                document.getElementById("btnDoubt").className = "px-5 py-3 border-none bg-amber-500 text-slate-900 rounded-xl font-bold text-sm transition-all flex items-center gap-2";
+            } else {
+                indicatorRagu.style.display = "none";
+                document.getElementById("btnDoubt").className = "px-5 py-3 border border-amber-300 bg-amber-50 hover:bg-amber-100/70 text-amber-800 rounded-xl font-semibold text-sm transition-all flex items-center gap-2";
+            }
+
+            // Render daftar opsi jawaban
+            const containerOpsi = document.getElementById("containerOpsi");
+            containerOpsi.innerHTML = "";
+
+            const labels = ["A", "B", "C", "D"];
+            currentSoal.options.forEach((opsi, idx) => {
+                const isSelected = userAnswers[currentQuestionIndex] === idx;
+                
+                // Elemen Card untuk Opsi Jawaban
+                const optionCard = document.createElement("div");
+                optionCard.onclick = () => selectAnswer(idx);
+                optionCard.className = `flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all duration-150 ${
+                    isSelected 
+                    ? "border-indigo-600 bg-indigo-50/50 shadow-md shadow-indigo-100/50" 
+                    : "border-slate-100 hover:border-slate-200 bg-slate-50 hover:bg-slate-100/50"
+                }`;
+
+                // Label Lingkaran Alfabet (A, B, C, D)
+                const alphabetLabel = document.createElement("div");
+                alphabetLabel.className = `w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 transition-colors ${
+                    isSelected 
+                    ? "bg-indigo-600 text-white" 
+                    : "bg-white text-slate-500 border border-slate-200"
+                }`;
+                alphabetLabel.textContent = labels[idx];
+
+                // Isi teks opsi
+                const textContainer = document.createElement("div");
+                textContainer.className = `text-sm font-medium transition-colors ${
+                    isSelected ? "text-indigo-900 font-semibold" : "text-slate-700"
+                }`;
+                textContainer.innerHTML = opsi;
+
+                optionCard.appendChild(alphabetLabel);
+                optionCard.appendChild(textContainer);
+                containerOpsi.appendChild(optionCard);
+            });
+
+            // Atur ketersediaan tombol navigasi Sebelumnya/Berikutnya
+            document.getElementById("btnPrev").disabled = (currentQuestionIndex === 0);
+            if (currentQuestionIndex === 0) {
+                document.getElementById("btnPrev").classList.add("opacity-50", "cursor-not-allowed");
+            } else {
+                document.getElementById("btnPrev").classList.remove("opacity-50", "cursor-not-allowed");
+            }
+
+            const btnNext = document.getElementById("btnNext");
+            if (currentQuestionIndex === listSoal.length - 1) {
+                btnNext.innerHTML = `Selesai <i data-lucide="check-square" class="w-4 h-4"></i>`;
+                btnNext.className = "px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2";
+            } else {
+                btnNext.innerHTML = `Berikutnya <i data-lucide="chevron-right" class="w-4 h-4"></i>`;
+                btnNext.className = "px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2";
+            }
+
+            lucide.createIcons();
+        }
+
+        function selectAnswer(optionIndex) {
+            playBeep('click');
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Simpan status progres secara otomatis
+            saveProgressToLocalStorage();
+            renderQuestion();
+            renderGridNavigation();
+        }
+
+        function toggleDoubt() {
+            playBeep('click');
+            const isCurrentlyDoubt = doubtStatus[currentQuestionIndex] === true;
+            if (isCurrentlyDoubt) {
+                delete doubtStatus[currentQuestionIndex];
+            } else {
+                doubtStatus[currentQuestionIndex] = true;
+            }
+
+            saveProgressToLocalStorage();
+            renderQuestion();
+            renderGridNavigation();
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                playBeep('click');
+                currentQuestionIndex--;
+                renderQuestion();
+                renderGridNavigation();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < listSoal.length - 1) {
+                playBeep('click');
+                currentQuestionIndex++;
+                renderQuestion();
+                renderGridNavigation();
+            } else {
+                confirmSubmit();
+            }
+        }
+
+        // Melompat langsung ke nomor soal tertentu lewat panel samping
+        function jumpToQuestion(index) {
+            playBeep('click');
+            currentQuestionIndex = index;
+            renderQuestion();
+            renderGridNavigation();
+        }
+
+        function renderGridNavigation() {
+            const container = document.getElementById("containerGridNo");
+            container.innerHTML = "";
+
+            listSoal.forEach((soal, idx) => {
+                const isCurrent = currentQuestionIndex === idx;
+                const isAnswered = userAnswers[idx] !== undefined;
+                const isDoubt = doubtStatus[idx] === true;
+
+                const btn = document.createElement("button");
+                btn.onclick = () => jumpToQuestion(idx);
+
+                // Atur styling tombol berdasarkan status jawaban
+                let bgStyle = "bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100";
+                
+                if (isAnswered) {
+                    bgStyle = "bg-indigo-600 text-white hover:bg-indigo-700";
+                }
+                if (isDoubt) {
+                    bgStyle = "bg-amber-400 text-slate-900 hover:bg-amber-500 font-semibold";
+                }
+                if (isCurrent) {
+                    bgStyle += " ring-4 ring-indigo-200 scale-105 font-bold z-10";
+                }
+
+                btn.className = `h-10 w-10 rounded-xl text-xs flex items-center justify-center transition-all ${bgStyle}`;
+                btn.textContent = idx + 1;
+                container.appendChild(btn);
+            });
+        }
+
+        function showCustomModal(title, message, iconType, showCancel, onConfirmCallback) {
+            const modal = document.getElementById("customModal");
+            const modalBox = document.getElementById("modalBox");
+            const modalTitle = document.getElementById("modalTitle");
+            const modalMessage = document.getElementById("modalMessage");
+            const iconContainer = document.getElementById("modalIconContainer");
+            const icon = document.getElementById("modalIcon");
+            const btnConfirm = document.getElementById("btnModalConfirm");
+            const btnCancel = document.getElementById("btnModalCancel");
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+
+            // Sesuaikan warna ikon berdasarkan jenis alert
+            if (iconType === 'success') {
+                iconContainer.className = "p-3 rounded-xl shrink-0 bg-emerald-100 text-emerald-600";
+                icon.setAttribute("data-lucide", "check-circle");
+                btnConfirm.className = "px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-sm transition-all";
+            } else if (iconType === 'warning') {
+                iconContainer.className = "p-3 rounded-xl shrink-0 bg-amber-100 text-amber-600";
+                icon.setAttribute("data-lucide", "alert-triangle");
+                btnConfirm.className = "px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg text-sm transition-all";
+            } else {
+                iconContainer.className = "p-3 rounded-xl shrink-0 bg-indigo-100 text-indigo-600";
+                icon.setAttribute("data-lucide", "help-circle");
+                btnConfirm.className = "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition-all";
+            }
+
+            if (showCancel) {
+                btnCancel.style.display = "block";
+            } else {
+                btnCancel.style.display = "none";
+            }
+
+            // Bind Event Listeners
+            btnConfirm.onclick = () => {
+                modal.classList.add("hidden");
+                if (onConfirmCallback) onConfirmCallback();
+            };
+            btnCancel.onclick = () => {
+                modal.classList.add("hidden");
+            };
+
+            modal.classList.remove("hidden");
+            lucide.createIcons();
+        }
+
+        // Tombol selesaikan ujian manual diklik
+        function confirmSubmit() {
+            playBeep('warning');
+            const totalAnswered = Object.keys(userAnswers).length;
+            const totalDoubt = Object.keys(doubtStatus).length;
+            const totalQuestions = listSoal.length;
+
+            let warningMsg = `Anda telah menjawab ${totalAnswered} dari total ${totalQuestions} soal. `;
+            if (totalDoubt > 0) {
+                warningMsg += `Masih terdapat ${totalDoubt} soal bertanda ragu-ragu. `;
+            }
+            warningMsg += "Apakah Anda yakin ingin mengakhiri ujian dan mengumpulkan jawaban Anda sekarang?";
+
+            showCustomModal("Konfirmasi Kumpul Ujian", warningMsg, "warning", true, () => {
+                submitExam();
+            });
+        }
+
+        // Sistem mengumpulkan otomatis jika waktu habis
+        function autoSubmitExam() {
+            playBeep('warning');
+            showCustomModal(
+                "Waktu Ujian Habis", 
+                "Batas waktu pengerjaan ujian Anda telah berakhir. Sistem akan mengumpulkan lembar jawaban Anda secara otomatis.", 
+                "success", 
+                false, 
+                () => {
+                    submitExam();
+                }
+            );
+        }
+
+        function submitExam() {
+            if (timerInterval) clearInterval(timerInterval);
+            playBeep('success');
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let emptyCount = 0;
+
+            listSoal.forEach((soal, idx) => {
+                const answer = userAnswers[idx];
+                if (answer === undefined) {
+                    emptyCount++;
+                } else if (answer === soal.correct) {
+                    correctCount++;
+                } else {
+                    incorrectCount++;
+                }
+            });
+
+            // Menghitung persentase skor (Skor maksimal = 100)
+            const finalScore = Math.round((correctCount / listSoal.length) * 100);
+            
+            // Konversi ke Grade Huruf standar akademik
+            let grade = "E";
+            if (finalScore >= 85) grade = "A";
+            else if (finalScore >= 75) grade = "B";
+            else if (finalScore >= 65) grade = "C";
+            else if (finalScore >= 50) grade = "D";
+
+            // Status Kelulusan (Passing Grade = 70)
+            const isPassed = finalScore >= 70;
+
+            // Menampilkan data ke UI Panel Hasil
+            document.getElementById("txtSkor").textContent = finalScore;
+            document.getElementById("badgeGrade").textContent = `GRADE: ${grade}`;
+            document.getElementById("statBenar").textContent = correctCount;
+            document.getElementById("statSalah").textContent = incorrectCount;
+            document.getElementById("statKosong").textContent = emptyCount;
+
+            const banner = document.getElementById("bannerHasil");
+            const statusText = document.getElementById("txtKelulusan");
+            const subText = document.getElementById("txtSubKelulusan");
+            const iconCircle = document.getElementById("iconStatusCircle");
+
+            if (isPassed) {
+                banner.className = "p-8 text-center relative overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-600 text-white";
+                statusText.textContent = "Selamat, Anda LULUS!";
+                subText.textContent = "Nilai ujian Anda melampaui batas standar kelulusan minimal (Passing Grade 70).";
+                iconCircle.className = "inline-flex p-4 rounded-full bg-white/20 mb-4 text-white";
+                iconCircle.innerHTML = `<i data-lucide="award" class="w-12 h-12"></i>`;
+            } else {
+                banner.className = "p-8 text-center relative overflow-hidden bg-gradient-to-r from-rose-600 to-red-600 text-white";
+                statusText.textContent = "Maaf, Anda BELUM LULUS";
+                subText.textContent = "Nilai Anda belum melampaui batas standar kelulusan minimal (Passing Grade 70).";
+                iconCircle.className = "inline-flex p-4 rounded-full bg-white/20 mb-4 text-white";
+                iconCircle.innerHTML = `<i data-lucide="x-circle" class="w-12 h-12"></i>`;
+            }
+
+            // Pengisian Detail Sesi Siswa di Hasil
+            document.getElementById("resNama").textContent = document.getElementById("inputNama").value.trim();
+            document.getElementById("resNIM").textContent = document.getElementById("inputNIM").value.trim();
+            document.getElementById("resKelas").textContent = document.getElementById("selectKelas").value;
+
+            const now = new Date();
+            document.getElementById("resSelesai").textContent = `${now.toLocaleTimeString('id-ID')} WIB, ${now.toLocaleDateString('id-ID')}`;
+
+            // Sembunyikan Workspace Ujian, tampilkan Dashboard Hasil
+            document.getElementById("panelExam").classList.add("hidden");
+            document.getElementById("panelResult").classList.remove("hidden");
+            
+            // Bersihkan sesi di local storage demi mencegah kecurangan pengulangan langsung
+            clearLocalStorageSession();
+
+            // Sediakan data untuk ulasan jawaban mandiri
+            generateReviewContent();
+            
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function generateReviewContent() {
+            const container = document.getElementById("containerReviewList");
+            container.innerHTML = "";
+
+            listSoal.forEach((soal, idx) => {
+                const userAnswerIdx = userAnswers[idx];
+                const isCorrect = userAnswerIdx === soal.correct;
+                const isUnanswered = userAnswerIdx === undefined;
+
+                const wrapper = document.createElement("div");
+                wrapper.className = `p-6 rounded-2xl border bg-white space-y-4 shadow-sm ${
+                    isUnanswered ? "border-slate-200" : isCorrect ? "border-emerald-200" : "border-rose-200"
+                }`;
+
+                // Header Soal Review
+                const header = document.createElement("div");
+                header.className = "flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-slate-100";
+                
+                const questionNum = document.createElement("span");
+                questionNum.className = "text-sm font-bold text-slate-800";
+                questionNum.textContent = `Nomor Soal ${idx + 1}`;
+
+                const badge = document.createElement("span");
+                if (isUnanswered) {
+                    badge.className = "px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg uppercase flex items-center gap-1";
+                    badge.innerHTML = `<i data-lucide="minus-circle" class="w-3.5 h-3.5"></i> Tidak Dijawab`;
+                } else if (isCorrect) {
+                    badge.className = "px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg uppercase flex items-center gap-1";
+                    badge.innerHTML = `<i data-lucide="check-circle" class="w-3.5 h-3.5"></i> BENAR`;
+                } else {
+                    badge.className = "px-2.5 py-1 bg-rose-50 text-rose-700 text-xs font-bold rounded-lg uppercase flex items-center gap-1";
+                    badge.innerHTML = `<i data-lucide="x-circle" class="w-3.5 h-3.5"></i> SALAH`;
+                }
+
+                header.appendChild(questionNum);
+                header.appendChild(badge);
+                wrapper.appendChild(header);
+
+                // Konten Pertanyaan
+                const questionText = document.createElement("div");
+                questionText.className = "text-sm font-semibold text-slate-800 leading-relaxed";
+                questionText.innerHTML = soal.question;
+                wrapper.appendChild(questionText);
+
+                // Status Jawaban Pengguna vs Jawaban Benar
+                const answerSummary = document.createElement("div");
+                answerSummary.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold p-3.5 bg-slate-50 rounded-xl border border-slate-100";
+                
+                const userChoice = isUnanswered ? "-" : soal.options[userAnswerIdx];
+                const correctChoice = soal.options[soal.correct];
+
+                answerSummary.innerHTML = `
+                    <div>
+                        <span class="text-slate-400 block mb-0.5">Jawaban Anda:</span>
+                        <span class="${isCorrect ? 'text-emerald-700' : 'text-rose-700'}">${userChoice}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block mb-0.5">Jawaban Benar:</span>
+                        <span class="text-indigo-700">${correctChoice}</span>
+                    </div>
+                `;
+                wrapper.appendChild(answerSummary);
+
+                // Penjelasan / Pembahasan Soal
+                const explanationBox = document.createElement("div");
+                explanationBox.className = "bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 flex items-start gap-2.5";
+                explanationBox.innerHTML = `
+                    <i data-lucide="info" class="w-4 h-4 text-indigo-600 shrink-0 mt-0.5"></i>
+                    <div class="text-xs text-indigo-950 leading-relaxed">
+                        <strong>Pembahasan:</strong> ${soal.explanation}
+                    </div>
+                `;
+                wrapper.appendChild(explanationBox);
+
+                container.appendChild(wrapper);
+            });
+            lucide.createIcons();
+        }
+
+        function toggleReviewSection() {
+            playBeep('click');
+            const reviewSection = document.getElementById("sectionReview");
+            if (reviewSection.classList.contains("hidden")) {
+                reviewSection.classList.remove("hidden");
+                // Scroll perlahan ke arah ulasan
+                setTimeout(() => {
+                    reviewSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            } else {
+                reviewSection.classList.add("hidden");
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function downloadScoreSheet() {
+            playBeep('success');
+
+            const nama = document.getElementById("resNama").textContent;
+            const nim = document.getElementById("resNIM").textContent;
+            const kelas = document.getElementById("resKelas").textContent;
+            const selesai = document.getElementById("resSelesai").textContent;
+            const skor = document.getElementById("txtSkor").textContent;
+            const grade = document.getElementById("badgeGrade").textContent;
+            const benar = document.getElementById("statBenar").textContent;
+            const salah = document.getElementById("statSalah").textContent;
+            const kosong = document.getElementById("statKosong").textContent;
+
+            // Merangkai teks laporan yang rapi layaknya struk/sertifikat bukti kelulusan
+            let docText = "";
+            docText += "==================================================\n";
+            docText += "          BUKTI HASIL UJIAN ONLINE MANDIRI        \n";
+            docText += "               WEB PROGRAMMING EXAM               \n";
+            docText += "==================================================\n\n";
+            docText += `Nama Peserta   : ${nama}\n`;
+            docText += `NIM            : ${nim}\n`;
+            docText += `Kelas          : ${kelas}\n`;
+            docText += `Selesai Pada   : ${selesai}\n\n`;
+            docText += "--------------------------------------------------\n";
+            docText += "                RINCIAN PENILAIAN                 \n";
+            docText += "--------------------------------------------------\n";
+            docText += `Skor Akhir     : ${skor} / 100\n`;
+            docText += `Klasifikasi    : ${grade}\n`;
+            docText += `Status Kelulusan : ${skor >= 70 ? "LULUS" : "BELUM LULUS"}\n\n`;
+            docText += `Jawaban Benar  : ${benar}\n`;
+            docText += `Jawaban Salah  : ${salah}\n`;
+            docText += `Jawaban Kosong : ${kosong}\n\n`;
+            docText += "==================================================\n";
+            docText += " Dokumen ini digenerasi oleh sistem ujian online\n";
+            docText += " dan bersifat sah sebagai bentuk laporan akademik.\n";
+            docText += "==================================================\n";
+
+            // Proses unduhan file teks secara lokal menggunakan API Blob browser
+            const blob = new Blob([docText], { type: "text/plain;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Hasil_Ujian_WebProg_${nim}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
